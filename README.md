@@ -1,2 +1,3 @@
 # socket_learning
-Learning Python sockets
+Learning Python sockets   
+https://realpython.com/python-sockets/
