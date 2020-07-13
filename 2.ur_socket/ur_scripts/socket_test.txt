@@ -1,0 +1,19 @@
+ Program
+   BeforeStart
+     var_1≔socket_open("192.168.56.1",30000)
+   Robot Program
+     Loop (var_1≟ False )
+       var_1≔socket_open("192.168.56.1",30000)
+       Wait: 0.5
+     pose1≔get_actual_tcp_pose()
+     joints1≔get_actual_joint_positions()
+     socket_send_string(pose1)
+     Wait: 0.5
+     socket_send_string(joints1)
+     Wait: 0.5
+     socket_send_string("asking_for_data")
+     Wait: 0.5
+     var_2≔socket_read_ascii_float(3)
+     Wait: 0.5
+     var_1≔ False 
+     socket_close()
