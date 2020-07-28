@@ -7,22 +7,27 @@ import thread
 def on_new_client(clientsocket,addr):
     count = 0
     while True:
-        msg = clientsocket.recv(1024)
-        #do some checks and if msg == someWeirdSignal: break:
-        print(addr, ' >> ', msg)
-        msg = msg.decode() + " Server: " + str(count)
-        count += 1
-        #Maybe some code to compute the last digit of PI, play game or anything else can go here and when you are done.
-        clientsocket.send(msg.encode())
-    clientsocket.close()
+        try:
+            msg = clientsocket.recv(1024)
+            #do some checks and if msg == someWeirdSignal: break:
+            #print(addr, ' >> ', msg)
+            msg = msg.decode() + " Server: " + str(count)
+            count += 1
+            #Maybe some code to compute the last digit of PI, play game or anything else can go here and when you are done.
+            clientsocket.send(msg.encode())
+        except socket.error as socketerror:
+            print (count, " Lost connection to: ", addr)  
+            clientsocket.close()
+            return
 
 s = socket.socket()         # Create a socket object
-host = "192.168.56.1"          # Get local machine name
+host = "127.0.0.1"          # Get local machine name
 port = 65432                # Reserve a port for your service.
 
 print 'Server started!'
 print 'Waiting for clients...'
 
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Reuse address if already allocated. Useful if previous thread hung
 s.bind((host, port))        # Bind to the port
 s.listen(5)                 # Now wait for client connection.
 
